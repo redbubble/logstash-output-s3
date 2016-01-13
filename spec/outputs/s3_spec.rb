@@ -178,7 +178,7 @@ describe LogStash::Outputs::S3 do
 
       it "returns true if the tempfile is over the file_size limit" do
         Stud::Temporary.file do |tmp|
-          allow(tmp).to receive(:size) { 2024001 }
+          allow(tmp).to receive(:tell) { 2024001 }
 
           s3.tempfile = tmp
           expect(s3.rotate_events_log?).to be(true)
@@ -187,7 +187,7 @@ describe LogStash::Outputs::S3 do
 
       it "returns false if the tempfile is under the file_size limit" do
         Stud::Temporary.file do |tmp|
-          allow(tmp).to receive(:size) { 100 }
+          allow(tmp).to receive(:tell) { 100 }
 
           s3.tempfile = tmp
           expect(s3.rotate_events_log?).to eq(false)
@@ -206,7 +206,7 @@ describe LogStash::Outputs::S3 do
 
       after(:each) do
         s3.close
-        tmp.close 
+        tmp.close
         tmp.unlink
       end
 
