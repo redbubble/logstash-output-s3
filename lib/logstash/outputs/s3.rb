@@ -203,6 +203,7 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
       else
         @tempfile = File.open(filename, "a")
       end
+      @logger.debug("Creating file: #{@tempfile.inspect}", :filename => filename)
     end
   end
 
