@@ -172,11 +172,13 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
 
     @logger.debug("S3: ready to write file in bucket", :remote_filename => remote_filename, :bucket => @bucket)
 
+    @logger.debug File.open(file, 'r').readlines
+
     File.open(file, 'r') do |fileIO|
       begin
         # prepare for write the file
         object = bucket.objects[remote_filename]
-        object.write(fileIO, :acl => @canned_acl, :content_encoding => @encoding == "gzip" ? "gzip" : nil)
+        object.write(fileIO, :acl => @canned_acl, :content_encoding => nil)
       rescue AWS::Errors::Base => error
         @logger.error("S3: AWS error", :error => error)
         raise LogStash::Error, "AWS Configuration Error, #{error}"
@@ -203,7 +205,6 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
       else
         @tempfile = File.open(filename, "a")
       end
-      @logger.debug("Creating file: #{@tempfile.inspect}", :filename => filename)
     end
   end
 
