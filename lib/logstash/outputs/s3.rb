@@ -298,6 +298,11 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
     @time_file * 60
   end
 
+  public
+  def flush
+    @logger.debug("S3: received flush event")
+  end
+
   private
   def get_tempfile_extension
     @encoding == "gzip" ? "#{TEMPFILE_EXTENSION}.gz" : "#{TEMPFILE_EXTENSION}"
