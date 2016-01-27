@@ -354,8 +354,8 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
 
     @file_rotation_lock.synchronize do
       @tempfile.close unless @tempfile.nil? && @tempfile.closed?
+      move_file_to_bucket(@tempfile.path) unless @tempfile.nil?
     end
-    sleep 1 until @upload_queue.empty?
   end
 
   private
